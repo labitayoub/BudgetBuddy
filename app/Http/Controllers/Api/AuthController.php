@@ -101,7 +101,7 @@ class AuthController extends Controller
         }
     }
     
-    public function logout(Request $request)
+    public function logoutUser(Request $request)
     {
         try {
             // Revoke the token that was used to authenticate the current request
