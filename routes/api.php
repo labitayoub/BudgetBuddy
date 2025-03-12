@@ -33,8 +33,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/expenses/{id}', [ExpenseController::class, 'destroy']);
 });
 
-
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
