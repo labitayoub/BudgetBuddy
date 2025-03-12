@@ -26,3 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 });
+
+Route::get('/expenses', function () {
+    return 'expenses';
+});
