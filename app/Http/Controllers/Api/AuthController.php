@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+
+    public function getUser(Request $request)
+    {
+        return User::find($request->id);
+    }
+
     /**
      * Create User
      * @param Request $request
