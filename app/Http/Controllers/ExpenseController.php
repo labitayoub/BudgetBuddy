@@ -42,7 +42,7 @@ class ExpenseController extends Controller
      */
     public function show($id)
     {
-        //
+        return Expense::find($id);
     }
 
     /**
@@ -54,7 +54,9 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $expense = Expense::find($id);
+        $expense->update($request->all());
+        return $expense;
     }
 
     /**
@@ -65,6 +67,12 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return Expense::destroy($id);
     }
+    
+    public function search($name)
+    {
+        return Expense::where('title', 'like', '%'.$name.'%')->get();
+    }
+
 }
