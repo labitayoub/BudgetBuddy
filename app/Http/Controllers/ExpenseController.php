@@ -48,7 +48,9 @@ class ExpenseController extends Controller
 
     {
         $expense = Expense::with('tags')->findOrFail($id);
-        
+
+        // return response()->json([
+        //     'expense' => $expense
          return new ExpenseResource($expense->load('tags'));
     
     }
