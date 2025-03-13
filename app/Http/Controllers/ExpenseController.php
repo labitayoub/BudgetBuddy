@@ -41,8 +41,13 @@ class ExpenseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
+
     {
-        return Expense::find($id);
+        $expense = Expense::with('tags')->findOrFail($id);
+    
+        return response()->json([
+            'expense' => $expense
+        ]);
     }
 
     /**
