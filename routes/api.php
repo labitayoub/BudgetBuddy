@@ -18,6 +18,13 @@ use App\Http\Controllers\Api\AuthController;
 |
 */
 
+/**
+ * @OA\Get(
+ *     path="/api/produits",
+ *     @OA\Response(response="200", description="Liste des produits")
+ * )
+ */
+
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::get('/auth/user/{id}', [AuthController::class, 'getUser']);

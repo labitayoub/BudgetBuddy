@@ -75,6 +75,12 @@ class ExpenseController extends Controller
         return Expense::destroy($id);
     }
 
+        /**
+     * Remove the specified resource from storage.
+     *
+     * @param  str  $id
+     * @return \Illuminate\Http\Response
+     */
     public function search($name)
     {
         return Expense::where('title', 'like', '%'.$name.'%')->get();
