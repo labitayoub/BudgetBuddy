@@ -69,10 +69,24 @@ class ExpenseController extends Controller
     {
         return Expense::destroy($id);
     }
-    
+
     public function search($name)
     {
         return Expense::where('title', 'like', '%'.$name.'%')->get();
     }
+
+    public function addTags(Request $request, $id)
+{
+    $expense = Expense::findOrFail($id);
+
+    $validated = $request->validate([
+        'tags' => 'required|array',
+        'tags.*' => 'exists:tags,id',
+    ]);
+
+    $expense->tags()->syncWithoutDetaching($validated['tags']);
+
+    return response()->json(['message' => 'Tags associés avec succès !', 'expense' => $expense->load('tags')]);
+}
 
 }
