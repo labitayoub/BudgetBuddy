@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Expense;
 use Illuminate\Http\Request;
+use App\Http\Resources\ExpenseResource;
 
 class ExpenseController extends Controller
 {
@@ -13,7 +14,9 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-         return Expense::all();
+        //  return Expense::all();
+        return ExpenseResource::collection(Expense::all());
+
     }
 
     /**
@@ -31,7 +34,8 @@ class ExpenseController extends Controller
         'amount' => 'required',
         'user_id' => 'required'
     ]);
-        return Expense::create($request->all());
+        // return Expense::create($request->all());
+        return new ExpenseResource(Expense::create($request->all()));
     }
 
     /**
@@ -44,11 +48,11 @@ class ExpenseController extends Controller
 
     {
         $expense = Expense::with('tags')->findOrFail($id);
+        
+         return new ExpenseResource($expense->load('tags'));
     
-        return response()->json([
-            'expense' => $expense
-        ]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -61,7 +65,8 @@ class ExpenseController extends Controller
     {
         $expense = Expense::find($id);
         $expense->update($request->all());
-        return $expense;
+        // return $expense;
+        return new ExpenseResource($expense);
     }
 
     /**
@@ -72,7 +77,8 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-        return Expense::destroy($id);
+        // return Expense::destroy($id);
+        return Expense::findOrFail($id)->delete();
     }
 
         /**
@@ -83,7 +89,8 @@ class ExpenseController extends Controller
      */
     public function search($name)
     {
-        return Expense::where('title', 'like', '%'.$name.'%')->get();
+        // return Expense::where('title', 'like', '%'.$name.'%')->get();
+        return ExpenseResource::collection(Expense::where('title', 'like', '%'.$name.'%')->get());
     }
 
     public function addTags(Request $request, $id)
@@ -97,7 +104,8 @@ class ExpenseController extends Controller
 
     $expense->tags()->syncWithoutDetaching($validated['tags']);
 
-    return response()->json(['message' => 'Tags associés avec succès !', 'expense' => $expense->load('tags')]);
+    // return response()->json(['message' => 'Tags associés avec succès !', 'expense' => $expense->load('tags')]);
+    return new ExpenseResource($expense->load('tags'));
 }
 
 }
