@@ -89,14 +89,14 @@ class ExpenseController extends Controller
      * @param  str  $id
      * @return \Illuminate\Http\Response
      */
-    public function search($name)
-    {
-        // return Expense::where('title', 'like', '%'.$name.'%')->get();
-        return ExpenseResource::collection(Expense::where('title', 'like', '%'.$name.'%')->get());
-    }
+    // public function search($name)
+    // {
+    //     // return Expense::where('title', 'like', '%'.$name.'%')->get();
+    //     return ExpenseResource::collection(Expense::where('title', 'like', '%'.$name.'%')->get());
+    // }
 
     public function addTags(Request $request, $id)
-{
+    {
     $expense = Expense::findOrFail($id);
 
     $validated = $request->validate([
@@ -105,7 +105,7 @@ class ExpenseController extends Controller
     ]);
 
     $expense->tags()->syncWithoutDetaching($validated['tags']);
-
+ 
     // return response()->json(['message' => 'Tags associés avec succès !', 'expense' => $expense->load('tags')]);
     return new ExpenseResource($expense->load('tags'));
 }

@@ -32,9 +32,9 @@ Route::get('/auth/user/{id}', [AuthController::class, 'getUser']);
 
 // Route::resource('expenses', ExpenseController::class);
 
-Route::get('/expenses/search/{name}', [ExpenseController::class, 'search']);
 Route::get('/expenses', [ExpenseController::class, 'index']);
 Route::get('/expenses/{id}', [ExpenseController::class, 'show']);
+Route::get('/expenses/search/{name}', [ExpenseController::class, 'search']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {

@@ -110,7 +110,6 @@ class AuthController extends Controller
     public function logoutUser(Request $request)
     {
         try {
-            // Revoke the token that was used to authenticate the current request
             $request->user()->tokens()->delete();
             
             return response()->json([
