@@ -128,7 +128,7 @@ class GroupController extends Controller
                 'success' => false,
                 'message' => 'Failed to update group',
                 'error' => $e->getMessage()
-            ], $e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException ? 404 : 500);
+            ],404);
         }
     }
 
@@ -152,7 +152,7 @@ class GroupController extends Controller
                 'success' => false,
                 'message' => 'Failed to delete group',
                 'error' => $e->getMessage()
-            ], $e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException ? 404 : 500);
+            ], 404);
         }
     }
 }
