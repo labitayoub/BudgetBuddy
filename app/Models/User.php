@@ -50,4 +50,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Tag::class);
     }
+    public function groups()
+    {
+        return $this->hasMany(Group::class);
+    }
 }
