@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExpenseGroup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ExpenseGroupController extends Controller
 {
@@ -13,7 +16,11 @@ class ExpenseGroupController extends Controller
      */
     public function index()
     {
-        //
+        $expenseGroups = ExpenseGroup::where('user_id', Auth::id())->get();
+        return response()->json([
+            'status' => 'success',
+            'data' => $expenseGroups
+        ]);
     }
 
     /**
@@ -24,7 +31,31 @@ class ExpenseGroupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'budget' => 'nullable|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $expenseGroup = new ExpenseGroup();
+        $expenseGroup->name = $request->name;
+        $expenseGroup->description = $request->description;
+        $expenseGroup->budget = $request->budget;
+        $expenseGroup->user_id = Auth::id();
+        $expenseGroup->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Expense group created successfully',
+            'data' => $expenseGroup
+        ], 201);
     }
 
     /**
@@ -35,7 +66,19 @@ class ExpenseGroupController extends Controller
      */
     public function show($id)
     {
-        //
+        $expenseGroup = ExpenseGroup::where('user_id', Auth::id())->find($id);
+        
+        if (!$expenseGroup) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Expense group not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $expenseGroup
+        ]);
     }
 
     /**
@@ -47,7 +90,38 @@ class ExpenseGroupController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $expenseGroup = ExpenseGroup::where('user_id', Auth::id())->find($id);
+        
+        if (!$expenseGroup) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Expense group not found'
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'budget' => 'nullable|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $expenseGroup->name = $request->name;
+        $expenseGroup->description = $request->description;
+        $expenseGroup->budget = $request->budget;
+        $expenseGroup->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Expense group updated successfully',
+            'data' => $expenseGroup
+        ]);
     }
 
     /**
@@ -58,6 +132,20 @@ class ExpenseGroupController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $expenseGroup = ExpenseGroup::where('user_id', Auth::id())->find($id);
+        
+        if (!$expenseGroup) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Expense group not found'
+            ], 404);
+        }
+
+        $expenseGroup->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Expense group deleted successfully'
+        ]);
     }
 }
